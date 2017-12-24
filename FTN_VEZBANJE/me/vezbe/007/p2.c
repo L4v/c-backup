@@ -45,18 +45,33 @@ void destroy(Array *a){
 }
 
 void remove_item(Array *a, int index){
-    
+    Array temp;
+    init(&temp, 0);
+    temp.parray = realloc(temp.parray, (a->capacity-1)*sizeof(int));
+    temp.capacity = a->capacity - 1;
+    temp.filled = a->filled - 1;
+    memmove(temp.parray, a->parray, index * sizeof(int));
+    memmove(temp.parray + index, a->parray + index , (a->capacity - index - 1)*sizeof(int));
+    free(a->parray);
+    resize(a, -1);
+    a->filled --;
+    a->parray = temp.parray;
 }
 
 
 int main(void){
-    Array arr;
+    Array arr, tmp;
     int i = 0;
     init(&arr, 0);
     for(i = 0; i < 10; i ++)
         add_item(&arr, i);
     print(&arr);
+    printf("size:%i\nfill:%i\n", size(&arr), arr.filled);
     remove_item(&arr, 2);
     print(&arr);
+    printf("size:%i\nfill:%i\n", size(&arr), arr.filled);
+    add_item(&arr, 3);
+    print(&arr);
+    printf("size:%i\nfill:%i\n", size(&arr), arr.filled);
     return 0;
 }
