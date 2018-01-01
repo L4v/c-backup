@@ -15,7 +15,7 @@ node_t * newNode(char * naziv, int kub, int god){
         puts("NEMA DOVOLJNO MEMORIJE");
         exit(0);
     }
-    strcpy(new->naziv, naziv);
+    sprintf(new->naziv, "%s", naziv);
     new->kub = kub;
     new->god = god;
     new->levo = new->desno = NULL;
@@ -25,9 +25,9 @@ node_t * newNode(char * naziv, int kub, int god){
 void insert(node_t ** root, node_t * new){
     if(*root == NULL)
         *root = new;
-    else if(new->naziv < (*root)->naziv)
+    else if(strlen(new->naziv) < strlen((*root)->naziv))
         insert(&(*root)->levo, new);
-    else if((*root)->naziv < new->naziv)
+    else if(strlen((*root)->naziv) < strlen(new->naziv))
         insert(&(*root)->desno, new);
 }
 
@@ -54,9 +54,9 @@ void ispisMarka(node_t *root, char *naziv) {
 	if (root != NULL) {
 		if (strncmp(root->naziv, naziv, strlen(naziv)) == 0) {
 			printf("%s %d %d\n", root->naziv, root->kub, root->god);
-		}else if(naziv > root->naziv)
+		}else if(strlen(naziv) < strlen(root->naziv))
             ispisMarka(root->levo, naziv);
-        else if(naziv < root->naziv)
+        else if(strlen(naziv) > strlen(root->naziv))
             ispisMarka(root->desno, naziv);
         else
             printf("NE POSTOJI MODEL:%s\n", naziv);
